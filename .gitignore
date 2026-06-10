@@ -1,0 +1,23 @@
+﻿# Python scripts
+*.py
+decode_write.py
+gen_html.py
+write_html.py
+
+# Test files
+test*
+decode_write.py
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Data files (if any)
+data/
+
+# Analytics data (auto-generated on server)
+analytics_data.json
+
+# Other projects
+animal-island-vue/
+pet-task-system/

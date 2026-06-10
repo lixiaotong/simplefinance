@@ -1,0 +1,528 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>上海 · 财务自由计算器 🏝️</title>
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--p:#19c8b9;--s:#6fba2c;--w:#f5c31c;--e:#e05a5a;--t:#794f27;--t2:#9f927d;--td:#c4b89e;--bl:#e8e2d6;--bg:#f8f8f0;--bgi:#f7f3df;--teal:#82d5bb;--tdark:#186048;--pink:#f8a6b2;--yellow:#f7cd67;--orange:#e59266;--green:#8ac68a;--blue:#889df0;--brown:#9a835a;--purple:#b77dee;--font:Nunito,"Noto Sans SC","Zen Maru Gothic","HarmonyOS Sans SC","MiSans",-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+body{font-family:var(--font);background:var(--bg);color:var(--t);line-height:1.5715;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle,rgba(196,184,158,0.08)1.5px,transparent 1.5px),radial-gradient(circle,rgba(196,184,158,0.05)1px,transparent 1px);background-size:28px 28px,14px 14px;background-position:0 0,7px 7px;pointer-events:none;z-index:0}
+#app{position:relative;z-index:1}
+.page{max-width:1100px;margin:0 auto;padding:24px 20px 60px}
+.ati{display:inline-block;font-weight:800;line-height:1;user-select:none}
+.ati__i{--rf:#27d039;--rb:#20992a;--rk:#115017;--rt:#fff;position:relative;display:inline-flex;align-items:center;justify-content:center;height:2em;padding:0 1.6em;color:var(--rt);font-weight:900;letter-spacing:0.04em;white-space:nowrap;filter:drop-shadow(0 0.08em 0.12em rgba(0,0,0,0.05))}
+.ati__t{position:relative;z-index:4;font-size:inherit;display:inline-flex;align-items:center;height:2em;padding-top:0.11em;color:var(--rt);text-shadow:0 0.04em 0.08em rgba(0,0,0,0.05)}
+.ati__b{position:absolute;font-size:inherit;bottom:-0.4em;width:1.7em;height:1.7em;background:var(--rb);z-index:1}
+.ati__b--l{left:-0.6em;border-radius:0.08em 0 0 0.08em;clip-path:polygon(100% 0%,100% 100%,0% 100%,30% 50%,0% 0%)}
+.ati__b--r{right:-0.6em;border-radius:0 0.08em 0.08em 0;clip-path:polygon(0% 0%,100% 0%,70% 50%,100% 100%,0% 100%)}
+.ati__f{position:absolute;width:0;height:0;border-style:solid;z-index:2}
+.ati__f--l{left:0.15em;top:calc(100% - 0.05em);border-width:0 0.95em 0.45em 0;border-color:transparent var(--rk) transparent transparent}
+.ati__f--r{right:0.15em;top:calc(100% - 0.05em);border-width:0 0 0.45em 0.95em;border-color:transparent transparent transparent var(--rk)}
+.ati__o{position:absolute;font-size:inherit;inset:0 0.1em;background:var(--rf);border-radius:0.2em;z-index:3;transform:perspective(11.5em) rotateX(3deg);box-shadow:inset 0 -0.06em 0 rgba(0,0,0,0.05);pointer-events:none}
+.ati--teal{--rf:#82d5bb;--rb:#40a880;--rk:#186048;--rt:#fff}
+.ati--green{--rf:#8ac68a;--rb:#509050;--rk:#205020;--rt:#fff}
+.ati--pink{--rf:#f8a6b2;--rb:#e06880;--rk:#a03060;--rt:#fff}
+.ati--blue{--rf:#889df0;--rb:#5068d8;--rk:#2030a0;--rt:#fff}
+.ati--yellow{--rf:#f7cd67;--rb:#d4a030;--rk:#8a6010;--rt:#725d42}
+.ati--orange{--rf:#e59266;--rb:#c06a30;--rk:#7a3a10;--rt:#fff}
+.ati--brown{--rf:#9a835a;--rb:#705830;--rk:#3a2810;--rt:#fff}
+.ati--purple{--rf:#b77dee;--rb:#9050d0;--rk:#5a1a9a;--rt:#fff}
+.acd{border-radius:20px;padding:18px 24px;background:rgb(247,243,223);color:#725d42;font-weight:500;transition:all 0.3s ease}
+.acd--da{border:2px dashed #e8dcc8;background:rgb(250,248,242);box-shadow:none}
+.acd--teal{background:#82d5bb;color:#fff}
+.acd--green{background:#8ac68a;color:#fff}
+.acd--pink{background:#f8a6b2;color:#fff}
+.acd--blue{background:#889df0;color:#fff}
+.acd--yellow{background:#f7cd67;color:#725d42}
+.acd--orange{background:#e59266;color:#fff}
+.acd--brown{background:#9a835a;color:#fff}
+.acd--pat{background:radial-gradient(circle,rgba(196,184,158,0.15)1.5px,transparent 1.5px),radial-gradient(circle,rgba(196,184,158,0.1)1px,transparent 1px),rgb(247,243,223);background-size:28px 28px,14px 14px;background-position:0 0,7px 7px;border:1.5px solid #d4c4a8;cursor:default}
+.sec{margin-bottom:32px}
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sh__i{font-size:24px}
+.sh__t{font-size:18px;font-weight:800;color:var(--t)}
+.tg{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.tb{padding:10px 6px;border-radius:14px;border:2px solid var(--bl);background:var(--bg);cursor:pointer;text-align:center;transition:all 0.2s;font-family:var(--font);font-size:13px;font-weight:600;color:var(--t)}
+.tb:hover{border-color:var(--teal);transform:translateY(-2px);box-shadow:0 3px 10px 0 rgba(61,52,40,0.1)}
+.tb--a{border-color:var(--teal);background:var(--teal);color:#fff;box-shadow:0 4px 0 0 var(--tdark);transform:translateY(-1px)}
+.tb__a{display:block;font-size:11px;color:var(--t2);margin-top:2px}
+.tb--a .tb__a{color:rgba(255,255,255,0.85)}
+.hg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.hb{padding:12px 10px;border-radius:16px;border:2.5px solid var(--bl);background:var(--bg);cursor:pointer;text-align:center;transition:all 0.2s;font-family:var(--font)}
+.hb:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:0 3px 10px 0 rgba(61,52,40,0.1)}
+.hb--a{border-color:var(--orange);background:rgba(229,146,102,0.06);box-shadow:0 4px 0 0 #c06a30;transform:translateY(-1px)}
+.hb__e{font-size:26px;display:block;margin-bottom:4px}
+.hb__l{font-size:14px;font-weight:700;color:var(--t)}
+.hb__d{font-size:11px;color:var(--t2);margin-top:3px}
+.fg{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.fb{padding:16px 12px;border-radius:18px;border:2.5px solid var(--bl);background:var(--bg);cursor:pointer;text-align:center;transition:all 0.2s;font-family:var(--font)}
+.fb:hover{border-color:var(--p);transform:translateY(-2px);box-shadow:0 3px 10px 0 rgba(61,52,40,0.1)}
+.fb--a{border-color:var(--p);background:var(--primary-bg);box-shadow:0 4px 0 0 var(--primary-active);transform:translateY(-1px)}
+.fb__e{font-size:32px;display:block;margin-bottom:6px}
+.fb__l{font-size:15px;font-weight:700;color:var(--t)}
+.fb__d{font-size:12px;color:var(--t2);margin-top:4px}
+.rg{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ri{background:rgba(255,255,255,0.6);border-radius:16px;padding:16px;text-align:center;border:2px solid var(--bl)}
+.ri__l{font-size:13px;color:var(--t2);margin-bottom:6px}
+.ri__v{font-size:24px;font-weight:800;color:var(--t)}
+.ri__u{font-size:13px;color:var(--t2);font-weight:400;margin-left:2px}
+.ri--h{border-color:var(--s);background:rgba(111,186,44,0.06)}
+.ri--h .ri__v{color:var(--s);font-size:28px}
+.ct{width:100%;border-collapse:separate;border-spacing:0 4px}
+.ct th{font-size:12px;font-weight:700;color:var(--t2);padding:8px 10px;text-align:center;border-bottom:2px solid var(--bl);white-space:nowrap}
+.ct td{padding:10px;text-align:center;background:rgba(255,255,255,0.5);border-radius:10px;font-weight:600;font-size:13px;color:var(--t)}
+.ct .hl td{background:rgba(130,213,187,0.18)}
+.ct .hc{color:var(--s);font-weight:800}
+.ct .tdl{text-align:left}
+.cr{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}
+.ci{flex:1;min-width:180px;height:45px;padding:0 16px;border:2.5px solid var(--bl);border-radius:18px;font-family:var(--font);font-size:15px;font-weight:600;color:var(--t);background:var(--bgi);outline:none;transition:border-color 0.2s}
+.ci:focus{border-color:var(--p)}
+.cg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.ci2{padding:12px;background:rgba(255,255,255,0.4);border-radius:14px;text-align:center;border:1.5px solid var(--bl)}
+.ci2__l{font-size:11px;color:var(--t2)}
+.ci2__v{font-size:20px;font-weight:800;color:var(--t);margin-top:2px}
+.ib{margin-top:14px;padding:14px 18px;background:rgba(255,255,255,0.35);border-radius:14px;line-height:1.8;font-size:14px}
+.gg{height:10px;border-radius:10px;background:var(--bl);overflow:hidden;margin:10px 0}
+.gg__f{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--teal),var(--green));transition:width 0.6s ease}
+.tb2{background:rgba(130,213,187,0.1);border:2px dashed rgba(130,213,187,0.4);border-radius:18px;padding:18px;margin-top:10px}
+.tb2__t{font-weight:700;font-size:14px;color:var(--tdark);margin-bottom:6px}
+.tb2 p{font-size:13px;color:var(--t2);margin-bottom:4px;line-height:1.8}
+.ld{text-align:center;font-size:14px;color:var(--td);margin:20px 0;letter-spacing:8px}
+.st{font-size:13px;color:var(--t2);font-weight:600;margin-bottom:8px}
+.bt{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.bt__i{background:rgba(255,255,255,0.4);border-radius:12px;padding:10px;text-align:center}
+.bt__l{font-size:11px;color:var(--t2)}
+.bt__v{font-size:16px;font-weight:700;color:var(--t);margin-top:2px}
+.br{display:grid;grid-template-columns:1fr;gap:5px;margin-top:10px}
+.br__r{display:flex;align-items:center;gap:8px}
+.br__l{font-size:11px;font-weight:600;width:80px;text-align:right;flex-shrink:0}
+.br__b{flex:1;height:20px;border-radius:10px;background:rgba(255,255,255,0.35);overflow:hidden;position:relative}
+.br__f{height:100%;border-radius:10px;transition:width 0.5s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:10px;font-weight:700;color:#fff;min-width:28px}
+.br__v{font-size:11px;color:var(--t2);width:65px;flex-shrink:0;text-align:left}
+/* analytics */
+.ag{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.ai{background:rgba(255,255,255,0.4);border-radius:12px;padding:10px;text-align:center}
+.ai__l{font-size:11px;color:var(--t2)}
+.ai__v{font-size:18px;font-weight:800;color:var(--t);margin-top:2px}
+.ai__s{font-size:11px;color:var(--td)}
+.acs{text-align:center;font-size:11px;color:var(--td);margin-top:6px}
+@media(max-width:800px){
+  .page{padding:16px 12px 40px}
+  .rg,.bt,.ag{grid-template-columns:1fr 1fr}
+  .fg,.tg{grid-template-columns:repeat(2,1fr)}
+  .cg{grid-template-columns:repeat(2,1fr)}
+  .hg{grid-template-columns:1fr}
+  .br__l{width:60px;font-size:10px}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const Title={props:{size:{type:String,default:"middle"},color:{type:String,default:"default"}},template:`<span class="ati" :style="{fontSize:size==='small'?'14px':size==='large'?'28px':'20px'}"><span class="ati__i" :class="'ati--'+color"><span class="ati__b ati__b--l"></span><span class="ati__b ati__b--r"></span><span class="ati__f ati__f--l"></span><span class="ati__f ati__f--r"></span><span class="ati__o"></span><span class="ati__t"><slot/></span></span></span>`};
+const Card={props:{color:{type:String,default:"default"},dashed:Boolean,pattern:Boolean},template:`<div class="acd" :class="[dashed?'acd--da':'',color!=='default'?'acd--'+color:'',pattern?'acd--pat':'']"><slot/></div>`};
+
+const TIERS=[
+  {k:"t1",l:"极简生活",d:"基本生存",a:1500,f:800,cl:100,tr:50,tp:150,ot:100,hd:"床位/城中村"},
+  {k:"t2",l:"基础节约",d:"精打细算",a:2500,f:1200,cl:200,tr:150,tp:250,ot:150,hd:"合租单间"},
+  {k:"t3",l:"温饱标准",d:"满足日常",a:3500,f:1500,cl:300,tr:300,tp:300,ot:250,hd:"合租主卧/远郊整租"},
+  {k:"t4",l:"上海平均",d:"人均基准线",a:4500,f:1800,cl:400,tr:400,tp:400,ot:300,hd:"整租一居室"},
+  {k:"t5",l:"小康生活",d:"略有盈余",a:6000,f:2300,cl:600,tr:700,tp:600,ot:600,hd:"一居室/小两居"},
+  {k:"t6",l:"舒适生活",d:"偶尔奢侈",a:8000,f:2800,cl:800,tr:900,tp:800,ot:800,hd:"精装一居/小两居"},
+  {k:"t7",l:"小资情调",d:"品质追求",a:10000,f:3200,cl:1200,tr:1200,tp:1000,ot:1400,hd:"精装两居"},
+  {k:"t8",l:"品味生活",d:"精致日常",a:13000,f:4000,cl:1500,tr:1500,tp:1500,ot:2000,hd:"精装三居"},
+  {k:"t9",l:"轻奢享受",d:"随心所欲",a:18000,f:5000,cl:2500,tr:2500,tp:2000,ot:2500,hd:"优质公寓/三居"},
+  {k:"t10",l:"高阶自由",d:"自由不羁",a:25000,f:6000,cl:3500,tr:3500,tp:3000,ot:3000,hd:"高端住宅/江景房"},
+];
+const HOUSING_DEFAULTS={
+  own: {l:"已有住房(无贷)",e:"🏠",d:"仅物业水电",c:{t1:200,t2:250,t3:300,t4:400,t5:500,t6:600,t7:700,t8:800,t9:1000,t10:1200}},
+  rent:{l:"租房(可编辑)",e:"🔑",d:"链家参考价·可修改",c:{t1:1500,t2:2500,t3:3500,t4:5000,t5:6000,t6:7500,t7:10000,t8:13000,t9:18000,t10:28000}},
+  mort:{l:"还房贷(可编辑)",e:"🏦",d:"月供参考·可修改",c:{t1:1500,t2:2500,t3:3500,t4:8000,t5:10000,t6:13000,t7:16000,t8:19000,t9:26000,t10:38000}},
+};
+const BC={food:"#e59266",house:"#889df0",trans:"#8ac68a",cloth:"#f8a6b2",travel:"#b77dee",other:"#f7cd67"};
+const FAMILIES=[
+  {k:"single",l:"单身独居",e:"🧑",d:"一人世界",m:1.0,r:"1.0x",ad:1},
+  {k:"couple",l:"甜蜜小两口",e:"👫",d:"二人世界",m:2.0,r:"2.0x",ad:2},
+  {k:"onechild",l:"幸福三口",e:"👨‍👩‍👧",d:"一个宝宝",m:2.6,r:"2.6x",ad:2},
+  {k:"twochild",l:"欢乐四口",e:"👨‍👩‍👧‍👦",d:"两个宝宝",m:3.2,r:"3.2x",ad:2},
+];
+const SH={daily:125,monthly:4500,yearly:54000,rank:"全国第二",year:2024};
+const RATE=0.02;
+const FN={
+  t1:{f:"食堂/自炊+简单外卖",t:"公交+步行",c:"基本换季",r:"近郊",o:"话费日用品"},
+  t2:{f:"食堂+自炊+平价外卖",t:"地铁+公交",c:"打折快时尚",r:"短途旅行",o:"日用品+娱乐"},
+  t3:{f:"自炊+外卖+偶尔下馆子",t:"地铁通勤",c:"快时尚+换季",r:"国内短途",o:"话费+基本社交"},
+  t4:{f:"均衡饮食+外卖+周末聚餐",t:"地铁+偶尔打车",c:"品牌折扣",r:"国内1-2次",o:"社交+健身"},
+  t5:{f:"品质外卖+周末餐厅+水果自由",t:"打车+地铁结合",c:"品牌+季末采购",r:"国内2-3次",o:"健身+文娱+社交"},
+  t6:{f:"品质餐厅+外卖+咖啡自由",t:"打车为主",c:"设计师品牌+季购",r:"国内+亚洲",o:"兴趣班+娱乐"},
+  t7:{f:"精致餐厅+高端外卖+下午茶",t:"打车+共享汽车",c:"轻奢品牌+季度",r:"国内+日韩",o:"品质生活+收藏"},
+  t8:{f:"私房菜+高端食材+红酒",t:"打车+租车",c:"设计师品牌+海淘",r:"亚洲+欧美",o:"高端社交+爱好"},
+  t9:{f:"Fine Dining+高端食材+名酒",t:"有车+打车",c:"奢侈品牌+定制",r:"欧美+高端旅行",o:"高端俱乐部+投资"},
+  t10:{f:"米其林+顶级食材+名庄酒",t:"豪车+专车",c:"奢侈品牌+高定",r:"全球旅行+度假",o:"私人会所+收藏"},
+};
+
+// ===== Analytics =====
+const API = "analytics.php";
+const LS_KEY = "ff_myip";
+
+const App={
+  components:{Title,Card},
+  setup(){
+    const at=Vue.ref("t4");const ca=Vue.ref("");const fk=Vue.ref("single");const uc=Vue.ref(false);const ho=Vue.ref("rent");
+    const rentCustom=Vue.ref(5000);const mortCustom=Vue.ref(8000);
+    // Stats
+    const myIP=Vue.ref("");const mode=Vue.ref("loading");
+    const totalVisits=Vue.ref(0);const uniqueIPs=Vue.ref(0);
+    const myCount=Vue.ref(0);const firstDate=Vue.ref("");
+
+    Vue.onMounted(async()=>{
+      // Try server-side analytics first
+      try{
+        // Record this visit via POST
+        const r=await fetch(API,{method:"POST"});
+        if(r.ok){
+          const d=await r.json();
+          totalVisits.value=d.totalVisits||0;
+          uniqueIPs.value=d.uniqueIPs||0;
+          if(d.firstVisit)firstDate.value=new Date(d.firstVisit).toLocaleDateString("zh-CN");
+          mode.value="server";
+          // Get our IP from a public API
+          try{
+            const ipr=await fetch("https://api.ipify.org?format=json");
+            const ipd=await ipr.json();
+            myIP.value=ipd.ip;
+            try{localStorage.setItem(LS_KEY,ipd.ip)}catch(e){}
+          }catch(e){
+            myIP.value="(已记录)";
+          }
+          return;
+        }
+      }catch(e){/* fall through to local */}
+      // Fallback: localStorage
+      mode.value="local";
+      try{
+        const k="ff_stats_local";
+        let st={total:0,count:0,first:Date.now()};
+        const raw=localStorage.getItem(k);
+        if(raw){try{const p=JSON.parse(raw);if(p)st=p}catch(e){}}
+        st.total+=1;st.count+=1;
+        localStorage.setItem(k,JSON.stringify(st));
+        totalVisits.value=st.total;
+        uniqueIPs.value=1;
+        myCount.value=st.count;
+        firstDate.value=new Date(st.first).toLocaleDateString("zh-CN");
+        myIP.value="(本地模式)";
+      }catch(e){mode.value="off"}
+    });
+
+    Vue.watch(at,(nv)=>{
+      const t=TIERS.find(x=>x.k===nv);if(!t)return;
+      rentCustom.value=HOUSING_DEFAULTS.rent.c[nv]||5000;
+      mortCustom.value=HOUSING_DEFAULTS.mort.c[nv]||8000;
+    });
+
+    const tier=Vue.computed(()=>uc.value?null:TIERS.find(x=>x.k===at.value)||null);
+    const ppm=Vue.computed(()=>{if(uc.value&&ca.value){const n=parseInt(ca.value);return n>0?n:0}const t=TIERS.find(x=>x.k===at.value);return t?t.a:4500});
+    const tl=Vue.computed(()=>{if(uc.value)return"自定义";const t=TIERS.find(x=>x.k===at.value);return t?t.l:""});
+    const fam=Vue.computed(()=>FAMILIES.find(x=>x.k===fk.value)||FAMILIES[0]);
+    const otherPP=Vue.computed(()=>{if(uc.value||!tier.value)return ppm.value;const t=tier.value;return t.f+t.cl+t.tr+t.tp+t.ot});
+    const hTotal=Vue.computed(()=>{
+      if(uc.value||!tier.value)return 0;
+      if(ho.value==="own")return HOUSING_DEFAULTS.own.c[at.value]||0;
+      if(ho.value==="rent")return rentCustom.value||0;
+      if(ho.value==="mort")return mortCustom.value||0;
+      return 0;
+    });
+    const hPP=Vue.computed(()=>Math.round(hTotal.value/fam.value.ad));
+    const effPP=Vue.computed(()=>otherPP.value+hPP.value);
+    const mTotal=Vue.computed(()=>otherPP.value*fam.value.m+hTotal.value);
+    const yTotal=Vue.computed(()=>mTotal.value*12);
+    const dTotal=Vue.computed(()=>Math.round(mTotal.value/30.5));
+    const tgt=Vue.computed(()=>Math.round(yTotal.value/RATE));
+    const mi=Vue.computed(()=>Math.round(tgt.value*RATE/12));
+    const fm=Vue.computed(()=>FAMILIES.map(f=>{const mo=otherPP.value*f.m+hTotal.value;const yy=mo*12;return{...f,monthly:mo,yearly:yy,target:Math.round(yy/RATE)}}));
+    const ft=Vue.computed(()=>TIERS.map(t=>{const r={...t};FAMILIES.forEach(f=>{const oth=t.f+t.cl+t.tr+t.tp+t.ot;const hh=ho.value==="own"?HOUSING_DEFAULTS.own.c[t.k]||0:ho.value==="rent"?rentCustom.value:ho.value==="mort"?mortCustom.value:0;r[f.k]=Math.round((oth*f.m+hh)*12/RATE)});return r}));
+    const st=(k)=>{at.value=k;uc.value=false;ca.value=""};
+    const dc=()=>{uc.value=true};const sf=(k)=>{fk.value=k};const sh=(k)=>{ho.value=k};
+    const bd=Vue.computed(()=>{
+      const t=tier.value;if(!t)return[];const hp=hPP.value;const tot=effPP.value;
+      return[
+        {key:"food",i:"🍚",l:"饮食",pp:t.f,pc:Math.round(t.f/tot*100),pd:Math.round(t.f/30.5),n:FN[t.k].f},
+        {key:"house",i:"🏠",l:"居住",pp:hp,pc:Math.round(hp/tot*100),n:HOUSING_DEFAULTS[ho.value].l},
+        {key:"trans",i:"🚇",l:"交通",pp:t.tp,pc:Math.round(t.tp/tot*100),n:FN[t.k].t},
+        {key:"cloth",i:"👔",l:"衣物",pp:t.cl,pc:Math.round(t.cl/tot*100),n:FN[t.k].c},
+        {key:"travel",i:"✈️",l:"旅游",pp:t.tr,pc:Math.round(t.tr/tot*100),n:FN[t.k].r},
+        {key:"other",i:"🎬",l:"其他",pp:t.ot,pc:Math.round(t.ot/tot*100),n:FN[t.k].o},
+      ];
+    });
+    return{TIERS,HOUSING_DEFAULTS,FAMILIES,SH,RATE,BC,FN,at,ca,fk,uc,ho,rentCustom,mortCustom,myIP,mode,totalVisits,uniqueIPs,myCount,firstDate,tier,ppm,tl,fam,otherPP,hTotal,hPP,effPP,mTotal,yTotal,dTotal,tgt,mi,fm,ft,st,dc,sf,sh,bd}
+  },
+  template:`
+    <div class="page">
+      <div style="text-align:center;margin-bottom:28px">
+        <Title color="teal" size="large">🏝️ 上海 · 财务自由计算器</Title>
+        <div style="margin-top:10px;font-size:15px;color:var(--t2)">
+          人均消费<span style="font-weight:700;color:var(--t)">10档分级</span> ·
+          <span style="font-weight:700;color:var(--t)">🏠住房金额可编辑</span> ·
+          年利<span style="font-weight:700;color:var(--s)">2%</span>财务自由
+        </div>
+      </div>
+      <div class="ld">✦ ✦ ✦</div>
+
+      <div class="sec">
+        <div class="sh"><span class="sh__i">📊</span><span class="sh__t">上海人均消费概况（{{ SH.year }}年）</span></div>
+        <Card pattern>
+          <div class="cg">
+            <div class="ci2"><div class="ci2__l">🥢 日均消费</div><div class="ci2__v">{{ SH.daily }} <span style="font-size:13px;font-weight:400">元</span></div></div>
+            <div class="ci2"><div class="ci2__l">📅 月均消费</div><div class="ci2__v">{{ SH.monthly.toLocaleString() }} <span style="font-size:13px;font-weight:400">元</span></div></div>
+            <div class="ci2"><div class="ci2__l">📆 年均消费</div><div class="ci2__v">{{ SH.yearly.toLocaleString() }} <span style="font-size:13px;font-weight:400">元</span></div></div>
+            <div class="ci2"><div class="ci2__l">🏆 全国排名</div><div class="ci2__v">{{ SH.rank }}</div></div>
+          </div>
+          <div style="margin-top:8px;font-size:12px;color:var(--t2);text-align:center">数据来源：上海市统计局</div>
+        </Card>
+      </div>
+
+      <div class="sec">
+        <div class="sh"><span class="sh__i">🎯</span><span class="sh__t">第一步：选择消费等级</span></div>
+        <Card dashed>
+          <div class="tg">
+            <button v-for="t in TIERS" :key="t.k" class="tb" :class='{"tb--a":at===t.k&&!uc}' @click="st(t.k)">
+              {{ t.l }}<span class="tb__a">{{ t.a.toLocaleString() }} 元/月</span>
+            </button>
+          </div>
+          <div class="cr">
+            <span style="font-size:14px;color:var(--t2);font-weight:600">✏️ 自定义：</span>
+            <input class="ci" type="number" v-model="ca" @focus="dc" placeholder="输入人均月消费..." min="0" step="100">
+            <span style="font-size:14px;color:var(--t2)">元/月/人</span>
+          </div>
+        </Card>
+      </div>
+
+      <div class="sec">
+        <div class="sh"><span class="sh__i">🏠</span><span class="sh__t">第三步：选择住房情况（金额可自行修改）</span></div>
+        <Card dashed>
+          <div class="hg">
+            <button v-for="(v,k) in HOUSING_DEFAULTS" :key="k" class="hb" :class='{"hb--a":ho===k}' @click="sh(k)">
+              <span class="hb__e">{{ v.e }}</span>
+              <span class="hb__l">{{ v.l }}</span>
+              <span class="hb__d">{{ v.d }}</span>
+            </button>
+          </div>
+          <div v-if="tier" style="margin-top:10px">
+            <div v-if="ho==='own'" style="text-align:center;font-size:14px;color:var(--t2)">
+              物业水电等 <strong style="color:var(--t)">{{ HOUSING_DEFAULTS.own.c[at].toLocaleString() }} 元</strong>/月 · 全家庭
+            </div>
+            <div v-if="ho==='rent'" class="cr" style="justify-content:center">
+              <span style="font-size:14px;color:var(--t2);font-weight:600">🔑 月租金：</span>
+              <input class="ci" style="max-width:220px" type="number" v-model.number="rentCustom" min="0" step="100">
+              <span style="font-size:14px;color:var(--t2)">元/月 · 全家庭</span>
+            </div>
+            <div v-if="ho==='mort'" class="cr" style="justify-content:center">
+              <span style="font-size:14px;color:var(--t2);font-weight:600">🏦 月供：</span>
+              <input class="ci" style="max-width:220px" type="number" v-model.number="mortCustom" min="0" step="100">
+              <span style="font-size:14px;color:var(--t2)">元/月 · 全家庭</span>
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:var(--td);text-align:center">
+              默认值为当前等级链家参考价 · 可自行修改
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      <div class="sec" v-if="tier">
+        <div class="sh"><span class="sh__i">🔍</span><span class="sh__t">「{{ tier.l }}」消费拆解（{{ HOUSING_DEFAULTS[ho].l }}）</span></div>
+        <Card color="teal">
+          <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:10px">
+            <span style="font-size:14px;font-weight:600;opacity:0.9">人均 {{ effPP.toLocaleString() }} 元/月 · {{ HOUSING_DEFAULTS[ho].l }}</span>
+            <span style="font-size:12px;opacity:0.7">{{ tier.d }} · {{ tier.hd }}</span>
+          </div>
+          <div class="bt">
+            <div class="bt__i">
+              <div class="bt__l">🍚 每日饮食</div>
+              <div class="bt__v">{{ Math.round(tier.f/30.5) }} <span style="font-size:11px;font-weight:400">元/天</span></div>
+              <div style="font-size:11px;color:var(--t2);margin-top:2px">≈ {{ Math.round(tier.f/30.5/3) }} 元/餐</div>
+            </div>
+            <div class="bt__i">
+              <div class="bt__l">👔 月度衣物</div>
+              <div class="bt__v">{{ tier.cl }} <span style="font-size:11px;font-weight:400">元/月</span></div>
+              <div style="font-size:11px;color:var(--t2);margin-top:2px">≈ {{ (tier.cl*12).toLocaleString() }} 元/年</div>
+            </div>
+            <div class="bt__i">
+              <div class="bt__l">✈️ 年度旅游</div>
+              <div class="bt__v">{{ (tier.tr*12).toLocaleString() }} <span style="font-size:11px;font-weight:400">元/年</span></div>
+              <div style="font-size:11px;color:var(--t2);margin-top:2px">≈ {{ tier.tr }} 元/月</div>
+            </div>
+          </div>
+          <div class="br">
+            <div class="br__r" v-for="item in bd" :key="item.key">
+              <span class="br__l">{{ item.i }} {{ item.l }}</span>
+              <div class="br__b"><div class="br__f" :style="{width:item.pc+'%',background:BC[item.key],minWidth:item.pc>12?'auto':'28px'}"><span v-if="item.pc>12">{{ item.pc }}%</span></div></div>
+              <span class="br__v">{{ item.pp.toLocaleString() }} 元</span>
+            </div>
+          </div>
+          <div style="margin-top:8px;display:grid;grid-template-columns:repeat(2,1fr);gap:4px;font-size:12px;color:rgba(255,255,255,0.85)">
+            <div v-for="item in bd" :key="'d'+item.key"><strong>{{ item.i }}</strong> {{ item.n }}</div>
+          </div>
+        </Card>
+      </div>
+
+      <div class="sec" v-if="uc&&!tier">
+        <Card dashed><div style="text-align:center;padding:20px;color:var(--t2);font-size:14px">✏️ 自定义模式下不展示消费明细</div></Card>
+      </div>
+
+      <div class="sec">
+        <div class="sh"><span class="sh__i">👨‍👩‍👧‍👦</span><span class="sh__t">第二步：选择家庭情况</span></div>
+        <Card dashed>
+          <div class="fg">
+            <button v-for="f in FAMILIES" :key="f.k" class="fb" :class='{"fb--a":fk===f.k}' @click="sf(f.k)">
+              <span class="fb__e">{{ f.e }}</span>
+              <span class="fb__l">{{ f.l }}</span>
+              <span class="fb__d">{{ f.d }} · 系数 {{ f.r }}</span>
+            </button>
+          </div>
+        </Card>
+      </div>
+
+      <div class="sec">
+        <div class="sh"><span class="sh__i">💰</span><span class="sh__t">计算结果</span></div>
+        <Card color="teal">
+          <div style="text-align:center;margin-bottom:14px;font-size:15px;font-weight:600;opacity:0.9">
+            {{ tl }} · {{ fam.e }} {{ fam.l }} · {{ HOUSING_DEFAULTS[ho].l }}
+          </div>
+          <div class="rg">
+            <div class="ri"><div class="ri__l">🌅 每日总消费</div><div class="ri__v">{{ dTotal.toLocaleString() }} <span class="ri__u">元</span></div></div>
+            <div class="ri"><div class="ri__l">📅 每月总消费</div><div class="ri__v">{{ mTotal.toLocaleString() }} <span class="ri__u">元</span></div></div>
+            <div class="ri"><div class="ri__l">📆 每年总消费</div><div class="ri__v">{{ yTotal.toLocaleString() }} <span class="ri__u">元</span></div></div>
+            <div class="ri ri--h"><div class="ri__l">🏦 财务自由目标</div><div class="ri__v">{{ tgt.toLocaleString() }} <span class="ri__u">元</span></div></div>
+          </div>
+          <div class="ib">
+            <div style="font-size:14px;color:var(--tdark);font-weight:700;margin-bottom:6px">💡 财务自由解读</div>
+            <div style="color:rgba(255,255,255,0.9)">
+              年利 <strong>{{ RATE*100 }}%</strong> · <strong>{{ fam.e }} {{ fam.l }}</strong>
+              年需 <strong>{{ yTotal.toLocaleString() }} 元</strong>（日均 {{ dTotal.toLocaleString() }} 元）。
+              <br>需存款 <strong style="font-size:16px">{{ (tgt/10000).toFixed(0) }} 万元</strong>，
+              年利息 <strong>{{ yTotal.toLocaleString() }} 元</strong>（月均 {{ mi.toLocaleString() }} 元）。
+            </div>
+          </div>
+          <div style="margin-top:14px">
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.7)">
+              <span>所需存款</span><span>{{ (tgt/10000).toFixed(0) }} 万元</span>
+            </div>
+            <div class="gg"><div class="gg__f" :style="{width:Math.min((effPP/25000)*100,100)+'%'}"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.5)">
+              <span>极简</span><span>平均</span><span>高阶</span>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      <div class="sec">
+        <div class="sh"><span class="sh__i">📋</span><span class="sh__t">各家庭对比（{{ HOUSING_DEFAULTS[ho].l }}）</span></div>
+        <Card dashed>
+          <div style="overflow-x:auto">
+            <table class="ct">
+              <thead><tr>
+                <th style="text-align:left">家庭</th><th>系数</th><th>🌅 日均</th><th>📅 月均</th><th>📆 年均</th><th>🏆 自由目标</th>
+              </tr></thead>
+              <tbody>
+                <tr v-for="f in fm" :key="f.k" :class='{hl:f.k===fk}'>
+                  <td class="tdl" style="font-weight:700">{{ f.e }} {{ f.l }}</td>
+                  <td>{{ f.r }}</td><td>{{ Math.round(f.monthly/30.5).toLocaleString() }} 元</td>
+                  <td>{{ f.monthly.toLocaleString() }} 元</td><td>{{ f.yearly.toLocaleString() }} 元</td>
+                  <td :class='{hc:f.k===fk}'>{{ (f.target/10000).toFixed(0) }} 万</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      </div>
+
+      <div class="sec">
+        <div class="sh"><span class="sh__i">📈</span><span class="sh__t">10档 × 4家庭 · 财务自由（{{ HOUSING_DEFAULTS[ho].l }}）</span></div>
+        <Card dashed>
+          <div style="overflow-x:auto">
+            <table class="ct">
+              <thead><tr>
+                <th style="text-align:left">消费等级</th><th>人均月</th>
+                <th v-for="f in FAMILIES" :key="f.k" style="font-size:11px" class="nn">{{ f.e }}</th>
+              </tr></thead>
+              <tbody>
+                <tr v-for="r in ft" :key="r.k" :class='{hl:at===r.k&&!uc}'>
+                  <td class="tdl" style="font-weight:700">{{ r.l }}</td>
+                  <td>{{ r.a.toLocaleString() }}</td>
+                  <td v-for="f in FAMILIES" :key="f.k" :class='{hc:at===r.k&&fk===f.k&&!uc}'>{{ (r[f.k]/10000).toFixed(0) }} 万</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="margin-top:8px;font-size:12px;color:var(--t2);text-align:center">存款（万元）· 年利 {{ RATE*100 }}%</div>
+        </Card>
+      </div>
+
+      <div class="sec">
+        <div class="sh"><span class="sh__i">💡</span><span class="sh__t">关于财务自由</span></div>
+        <Card dashed>
+          <div class="tb2">
+            <div class="tb2__t">📖 核心公式</div>
+            <p>财务自由所需本金 = <strong>家庭年支出 ÷ 年化收益率</strong></p>
+            <p>示例：{{ fam.l }} · {{ HOUSING_DEFAULTS[ho].l }} 年支出 {{ yTotal.toLocaleString() }} 元 ÷ {{ RATE*100 }}% = <strong>{{ (tgt/10000).toFixed(0) }} 万元</strong></p>
+          </div>
+          <div class="tb2" style="border-color:rgba(249,195,28,0.4);background:rgba(249,195,28,0.07)">
+            <div class="tb2__t" style="color:#8a6010">⚡ 注意事项</div>
+            <p>• 🏠 租房默认参考链家上海均价，房贷按首付30%+30年期估算，均可自行修改</p>
+            <p>• 📈 实际还需考虑通货膨胀（CPI 约 1-2%），建议上浮 20-30%</p>
+            <p>• 🌟 财务自由 ≠ 不工作，而是拥有 <strong style="color:var(--t)">选择的自由</strong></p>
+          </div>
+          <div style="margin-top:14px;text-align:center;font-size:12px;color:var(--td)">数据参考：上海市统计局 · 链家 · 仅供参考</div>
+        </Card>
+      </div>
+
+      <!-- Analytics -->
+      <div class="sec">
+        <div class="sh"><span class="sh__i">📡</span><span class="sh__t">访问统计</span></div>
+        <Card dashed>
+          <div class="ag">
+            <div class="ai">
+              <div class="ai__l">🌐 您的 IP</div>
+              <div class="ai__v" style="font-size:15px">{{ myIP||"获取中..." }}</div>
+              <div class="ai__s" v-if="mode==='server'">服务端统计</div>
+              <div class="ai__s" v-else-if="mode==='local'">本地统计</div>
+              <div class="ai__s" v-else>—</div>
+            </div>
+            <div class="ai">
+              <div class="ai__l">📊 累计访问</div>
+              <div class="ai__v">{{ totalVisits }} <span style="font-size:12px;font-weight:400">次</span></div>
+              <div class="ai__s">所有访客合计</div>
+            </div>
+            <div class="ai">
+              <div class="ai__l">👥 访客 IP</div>
+              <div class="ai__v">{{ uniqueIPs }} <span style="font-size:12px;font-weight:400">个</span></div>
+              <div class="ai__s">不同 IP 地址</div>
+            </div>
+            <div class="ai">
+              <div class="ai__l">🕒 首次统计</div>
+              <div class="ai__v" style="font-size:14px">{{ firstDate||"-" }}</div>
+              <div class="ai__s">数据起始日</div>
+            </div>
+          </div>
+          <div class="acs">
+            <template v-if="mode==='server'">✅ 服务端统计（analytics.php）· 数据持久化存储，所有访客共享</template>
+            <template v-else-if="mode==='local'">📌 本地模式（localStorage）· 仅本机可见，上传服务器后自动切换服务端</template>
+            <template v-else>⏳ 加载中...</template>
+          </div>
+        </Card>
+      </div>
+
+      <div class="ld">🌿 🏝️ 🌿</div>
+      <div style="text-align:center;font-size:13px;color:var(--td);padding:10px 0 20px">以 🐾 动物之森 的温柔 · 陪你规划未来</div>
+    </div>
+  `
+};
+
+Vue.createApp(App).mount("#app");
+</script>
+</body>
+</html>
