@@ -1,15 +1,29 @@
-﻿# Python
+﻿# Python scripts
 *.py
 
-# 临时文件
+# Temp / test files
 population-global-tmp.html
+test_pipe.txt
+test_write.txt
 
 # OS
 Thumbs.db
 .DS_Store
 
-# 服务器生成
+# Server generated
 analytics_data.json
 
-# node_modules (animal-island-vue 项目)
+# Full source packages (not needed on server)
+animal-island-vue/
+pet-task-system/node_modules/
+pet-task-system/server/
+pet-task-system/src/
+pet-task-system/data/
+pet-task-system/vite.config.js
+pet-task-system/package.json
+pet-task-system/package-lock.json
+pet-task-system/start.bat
+pet-task-system/.gitignore
+
+# Node
 node_modules/
