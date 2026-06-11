@@ -1,23 +1,15 @@
-﻿# Python scripts
+﻿# Python
 *.py
-decode_write.py
-gen_html.py
-write_html.py
 
-# Test files
-test*
-decode_write.py
+# 临时文件
+population-global-tmp.html
 
-# OS files
+# OS
 Thumbs.db
 .DS_Store
 
-# Data files (if any)
-data/
-
-# Analytics data (auto-generated on server)
+# 服务器生成
 analytics_data.json
 
-# Other projects
-animal-island-vue/
-pet-task-system/
+# node_modules (animal-island-vue 项目)
+node_modules/

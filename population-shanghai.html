@@ -1,0 +1,301 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026年上海人口年龄性别分布 · 动物之森风格</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Nunito,'Noto Sans SC',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background-color:#f8f8f0;color:#794f27;line-height:1.5715;overflow-x:hidden}
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 40px 80px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#b8e0d5 0%,#d4ece4 30%,#eef7f2 60%,#f8f8f0 100%);z-index:0}
+.hero-bg::before{content:'';position:absolute;inset:0;background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 400"><path fill="rgba(255,255,255,0.15)" d="M0,160C320,300 480,100 720,200C960,300 1120,100 1440,160L1440,400L0,400Z"/></svg>');background-size:cover;background-position:bottom}
+.hero-leaves{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.leaf{position:absolute;font-size:28px;opacity:.35;animation:leafFloat 12s ease-in-out infinite}
+.leaf:nth-child(1){top:10%;left:5%;animation-delay:0s;font-size:22px}
+.leaf:nth-child(2){top:20%;right:12%;animation-delay:2s;font-size:18px}
+.leaf:nth-child(3){top:60%;left:8%;animation-delay:4s;font-size:26px}
+.leaf:nth-child(4){top:40%;right:5%;animation-delay:1s;font-size:20px}
+.leaf:nth-child(5){top:75%;right:15%;animation-delay:3s;font-size:24px}
+.leaf:nth-child(6){bottom:15%;left:15%;animation-delay:5s;font-size:16px}
+@keyframes leafFloat{0%,100%{transform:translateY(0)rotate(0deg)}25%{transform:translateY(-18px)rotate(5deg)}50%{transform:translateY(-8px)rotate(-3deg)}75%{transform:translateY(-20px)rotate(4deg)}}
+.hero-content{position:relative;z-index:1;max-width:880px}
+.hero-icon{font-size:64px;margin-bottom:16px;display:block;filter:drop-shadow(0 4px 8px rgba(0,0,0,.08));animation:heroBounce 3s ease-in-out infinite}
+@keyframes heroBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero-title{font-weight:900;font-size:clamp(28px,5vw,48px);color:#FFF9E6;text-shadow:0 4px 2px rgba(0,0,0,.4);margin-bottom:12px;line-height:1.2}
+.hero-subtitle{font-size:clamp(16px,2vw,20px);color:#6b4e2e;font-weight:500;margin-bottom:8px;line-height:1.7}
+.hero-update-badge{display:inline-block;font-size:13px;padding:4px 14px;border-radius:12px;background:rgba(255,249,230,.9);color:#e05a5a;font-weight:700;margin-bottom:20px;border:2px solid rgba(224,90,90,.2)}
+.hero-stats-row{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin-top:16px}
+.hero-stat{background:rgba(255,249,230,.85);backdrop-filter:blur(8px);border-radius:20px;padding:18px 28px;border:2px solid rgba(121,79,39,.12);min-width:140px;transition:transform .3s ease}
+.hero-stat:hover{transform:translateY(-3px)}
+.hero-stat-num{font-weight:900;font-size:28px;color:#19c8b9}
+.hero-stat-label{font-size:12px;color:#9f927d;margin-top:2px}
+.hero-stat-sub{font-size:11px;color:#c4b89e;margin-top:0}
+.scroll-hint{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;color:#7c5734;font-size:12px;animation:bounce 2s ease-in-out infinite;cursor:pointer;text-decoration:none}
+@keyframes bounce{0%,100%{transform:translateX(-50%)translateY(0)}50%{transform:translateX(-50%)translateY(-8px)}}
+.section{max-width:1100px;margin:0 auto;padding:60px 32px}
+.section-title{text-align:center;font-weight:700;font-size:28px;color:#725d42;margin-bottom:8px}
+.section-desc{text-align:center;font-size:15px;color:#9f927d;margin-bottom:40px}
+.pyramid-wrap{background:#fffefa;border-radius:24px;padding:32px;border:2px solid #e8e2d6;box-shadow:0 4px 20px rgba(114,93,66,.08);margin-bottom:40px}
+.pyramid-wrap canvas{display:block;width:100%;height:auto;max-height:680px}
+.pyramid-legend{display:flex;justify-content:center;gap:32px;margin-top:16px}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#725d42}
+.legend-dot{width:16px;height:16px;border-radius:6px}
+.age-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.age-card{background:#fffefa;border-radius:20px;padding:20px;border:2px solid #e8e2d6;box-shadow:0 2px 8px rgba(114,93,66,.06);transition:all .3s ease;cursor:default}
+.age-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(114,93,66,.12);border-color:#c4b89e}
+.age-card-label{font-weight:700;font-size:16px;color:#725d42;margin-bottom:12px;text-align:center;padding-bottom:10px;border-bottom:2px dashed #e8e2d6}
+.age-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.age-bar-row:last-child{margin-bottom:0}
+.age-bar-label{font-size:12px;color:#9f927d;width:32px;flex-shrink:0;text-align:right}
+.age-bar-track{flex:1;height:20px;border-radius:10px;background:#f0ece2;overflow:hidden;display:flex}
+.age-bar-fill-m{height:100%;border-radius:10px;background:linear-gradient(90deg,#19c8b9,#3dd4c6);transition:width 1s ease}
+.age-bar-fill-f{height:100%;border-radius:10px;background:linear-gradient(90deg,#f5a0b8,#f7b8cc);transition:width 1s ease}
+.age-bar-count{font-size:12px;font-weight:600;width:50px;flex-shrink:0;text-align:left;color:#725d42}
+.age-bar-count-f{text-align:right}
+.insights-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.insight-card{background:linear-gradient(135deg,#fffefa,#f7f3e8);border-radius:22px;padding:28px 24px;border:2px solid #e8e2d6;text-align:center;transition:all .3s ease}
+.insight-card:hover{transform:translateY(-4px)scale(1.01);box-shadow:0 8px 28px rgba(114,93,66,.1)}
+.insight-icon{font-size:36px;margin-bottom:8px;display:block}
+.insight-value{font-weight:900;font-size:30px;color:#19c8b9;margin-bottom:4px}
+.insight-label{font-size:14px;color:#9f927d;font-weight:500}
+.insight-sub{font-size:12px;color:#c4b89e;margin-top:4px}
+.insight-trend{display:inline-block;font-size:11px;padding:2px 8px;border-radius:8px;margin-left:4px;font-weight:700}
+.table-wrap{background:#fffefa;border-radius:24px;padding:24px;border:2px solid #e8e2d6;box-shadow:0 4px 20px rgba(114,93,66,.08);overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+thead th{background:#f0ece2;color:#725d42;font-weight:700;padding:12px 16px;text-align:center;border-bottom:2px solid #e8e2d6}
+thead th:first-child{border-radius:14px 0 0 0}
+thead th:last-child{border-radius:0 14px 0 0}
+tbody td{padding:10px 16px;text-align:center;border-bottom:1px solid #f0ece2;color:#794f27}
+tbody tr:hover td{background:#e6f9f6}
+tbody tr:last-child td:first-child{border-radius:0 0 0 14px}
+tbody tr:last-child td:last-child{border-radius:0 0 14px 0}
+.age-label-cell{font-weight:700;color:#725d42}
+.boomer-row td{background:#fef3e2!important}
+.boomer-row:hover td{background:#ffedd4!important}
+.page-footer{text-align:center;padding:32px 40px;font-size:12px;color:#9f927d;border-top:2px solid #e8e2d6;margin-top:20px}
+.custom-divider{width:80%;max-width:400px;height:2px;margin:0 auto;background:linear-gradient(90deg,transparent,#c4b89e,transparent);border-radius:1px}
+.source-badge{display:inline-block;font-size:12px;padding:4px 12px;border-radius:10px;background:#e6f9f6;color:#19c8b9;font-weight:600;vertical-align:middle;margin-left:8px}
+.alert-banner{background:linear-gradient(90deg,#fef3e2,#fff5e6);border:2px solid #f5c31c;border-radius:18px;padding:16px 24px;margin-bottom:32px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.alert-banner-icon{font-size:24px}
+.alert-banner-text{flex:1;font-size:13px;color:#725d42;line-height:1.6}
+.alert-banner-text strong{color:#e05a5a}
+@media(max-width:768px){
+    .hero{padding:40px 20px 60px}.section{padding:40px 16px}
+    .hero-stats-row{gap:12px}.hero-stat{padding:14px 16px;min-width:100px}.hero-stat-num{font-size:20px}
+    .age-grid{grid-template-columns:1fr}.pyramid-wrap{padding:16px}.insights-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="hero" id="top">
+    <div class="hero-bg"></div>
+    <div class="hero-leaves">
+        <span class="leaf">🏙️</span><span class="leaf">🌸</span><span class="leaf">🌃</span>
+        <span class="leaf">🌿</span><span class="leaf">🍃</span><span class="leaf">🌱</span>
+    </div>
+    <div class="hero-content">
+        <span class="hero-icon">🏙️</span>
+        <h1 class="hero-title">2026年上海人口年龄性别分布</h1>
+        <div class="hero-update-badge">📅 2026年推算 · 基于第七次人口普查</div>
+        <p class="hero-subtitle">
+            🌸 以上海市2020年第七次人口普查为基准，结合人口迁移与老龄化趋势，<br>
+            呈现上海这座超老龄化超大城市的年龄结构与性别构成
+        </p>
+        <div class="hero-stats-row" id="heroStats"></div>
+    </div>
+    <a class="scroll-hint" href="#pyramid">▼ 向下滚动查看详情</a>
+</div>
+
+<div class="section" id="pyramid">
+    <h2 class="section-title">2026年上海人口金字塔</h2>
+    <p class="section-desc">横轴表示各年龄段人口数量（万人），左侧为男性、右侧为女性</p>
+
+    <div class="alert-banner">
+        <span class="alert-banner-icon">📢</span>
+        <div class="alert-banner-text">
+            <strong>上海深度老龄化：</strong>65岁以上人口占比高达<strong>21.0%</strong>，远高于全国（16.9%）和全球（10.7%）水平。
+            0-14岁少儿仅<strong>10.7%</strong>，老龄化、少子化并存。最大群体为30-34岁（269万，外来青壮年劳动力），
+            而65岁以上各年龄段人口积累显著，"头重脚轻"特征明显。
+        </div>
+    </div>
+
+    <div class="pyramid-wrap">
+        <canvas id="pyramidCanvas"></canvas>
+        <div class="pyramid-legend">
+            <div class="legend-item"><span class="legend-dot" style="background:#19c8b9"></span> 男性</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#f5a0b8"></span> 女性</div>
+        </div>
+    </div>
+</div>
+
+<div class="section"><div class="custom-divider"></div></div>
+
+<div class="section" id="cards">
+    <h2 class="section-title">各年龄段人口分布</h2>
+    <p class="section-desc">上海市各年龄段人数（万人）· 鼠标悬停查看详情</p>
+    <div class="age-grid" id="ageGrid"></div>
+</div>
+
+<div class="section"><div class="custom-divider"></div></div>
+
+<div class="section" id="insights">
+    <h2 class="section-title">上海人口关键洞察</h2>
+    <p class="section-desc">上海人口结构的独特特点</p>
+    <div class="insights-grid" id="insightsGrid"></div>
+</div>
+
+<div class="section" id="table">
+    <h2 class="section-title">详细数据表</h2>
+    <p class="section-desc">2026年上海市人口按年龄和性别分布推算数据</p>
+    <div class="table-wrap">
+        <table>
+            <thead><tr>
+                <th>年龄段</th><th>出生年份</th><th>男性（万）</th><th>女性（万）</th>
+                <th>性别比</th><th>合计（万）</th><th>占比</th>
+            </tr></thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="page-footer">
+    <div style="display:flex;justify-content:center;gap:20px;margin-bottom:12px;flex-wrap:wrap">
+        <span>🏙️ 动物之森风格 · 上海人口数据可视化</span>
+        <span>🌸 设计灵感来自 animal-island-vue</span>
+    </div>
+    <div>基准数据：上海市第七次全国人口普查（2020年）· 上海市统计局</div>
+    <div style="margin-top:4px;color:#c4b89e">2026年数据为基于人口学模型的推算值，仅供参考</div>
+</div>
+
+<script>
+const data=[
+{age:'0-4',  birth:'2022-2026', male:34,  female:32},
+{age:'5-9',  birth:'2017-2021', male:44,  female:40},
+{age:'10-14',birth:'2012-2016', male:66,  female:60},
+{age:'15-19',birth:'2007-2011', male:68,  female:64},
+{age:'20-24',birth:'2002-2006', male:98,  female:92},
+{age:'25-29',birth:'1997-2001', male:118, female:114},
+{age:'30-34',birth:'1992-1996', male:137, female:132},
+{age:'35-39',birth:'1987-1991', male:110, female:109},
+{age:'40-44',birth:'1982-1986', male:84,  female:82},
+{age:'45-49',birth:'1977-1981', male:76,  female:77},
+{age:'50-54',birth:'1972-1976', male:68,  female:69},
+{age:'55-59',birth:'1967-1971', male:62,  female:64},
+{age:'60-64',birth:'1962-1966', male:68,  female:72},
+{age:'65-69',birth:'1957-1961', male:76,  female:82},
+{age:'70-74',birth:'1952-1956', male:69,  female:76},
+{age:'75-79',birth:'1947-1951', male:50,  female:61},
+{age:'80-84',birth:'1942-1946', male:33,  female:41},
+{age:'85+',  birth:'1941年前',  male:22,  female:33}
+];
+
+const totalMale=data.reduce((s,d)=>s+d.male,0);
+const totalFemale=data.reduce((s,d)=>s+d.female,0);
+const totalPop=totalMale+totalFemale;
+const sexRatio=totalMale/totalFemale*100;
+const fmt=n=>n.toLocaleString('zh-CN');
+
+document.getElementById('heroStats').innerHTML=[
+    {num:'约'+fmt(totalPop)+'万',label:'上海市总人口',sub:'较2020年增加约100万'},
+    {num:fmt(totalMale)+'万',label:'男性人口',c:'#19c8b9',sub:'占比'+(totalMale/totalPop*100).toFixed(1)+'%'},
+    {num:fmt(totalFemale)+'万',label:'女性人口',c:'#f5a0b8',sub:'占比'+(totalFemale/totalPop*100).toFixed(1)+'%'},
+    {num:sexRatio.toFixed(1),label:'性别比（男/女）',c:'#f5c31c',sub:'女性略多'}
+].map(s=>'<div class="hero-stat"><div class="hero-stat-num" style="'+(s.c?'color:'+s.c:'')+'">'+s.num+'</div><div class="hero-stat-label">'+s.label+'</div><div class="hero-stat-sub">'+s.sub+'</div></div>').join('');
+
+function drawPyramid(){
+    const c=document.getElementById('pyramidCanvas');
+    const r=c.parentElement.getBoundingClientRect();
+    const dpr=window.devicePixelRatio||1;
+    const w=Math.min(r.width-4,1040),h=Math.min(w*.65,620);
+    c.width=w*dpr;c.height=h*dpr;
+    c.style.width=w+'px';c.style.height=h+'px';
+    const ctx=c.getContext('2d');ctx.scale(dpr,dpr);
+    const maxV=Math.max(...data.map(d=>Math.max(d.male,d.female)));
+    const L=80,R=w-20,T=20,B=h-30,chartH=B-T,halfW=(R-L)/2;
+    const scale=(halfW-60)/maxV,barH=chartH/data.length,gap=2;
+    ctx.strokeStyle='#f0ece2';ctx.lineWidth=1;
+    for(let i=0;i<=4;i++){
+        const x=L+(halfW/4)*i;ctx.beginPath();ctx.moveTo(x,T);ctx.lineTo(x,B);ctx.stroke();
+        const xr=L+halfW+(halfW/4)*i;ctx.beginPath();ctx.moveTo(xr,T);ctx.lineTo(xr,B);ctx.stroke();
+        ctx.fillStyle='#9f927d';ctx.font='11px Nunito,sans-serif';ctx.textAlign='center';
+        ctx.fillText(Math.round(maxV/4*i),x,B+16);ctx.fillText(Math.round(maxV/4*i),xr,B+16);
+    }
+    ctx.strokeStyle='#c4b89e';ctx.lineWidth=1.5;ctx.setLineDash([4,4]);
+    ctx.beginPath();ctx.moveTo(L+halfW,T);ctx.lineTo(L+halfW,B);ctx.stroke();ctx.setLineDash([]);
+    data.forEach((d,i)=>{
+        const y=T+i*barH,bh=barH-gap,r2=Math.min(6,bh/2);
+        const mW=d.male*scale,mX=L+halfW-mW;
+        const gm=ctx.createLinearGradient(mX,y,L+halfW,y);
+        gm.addColorStop(0,'#3dd4c6');gm.addColorStop(1,'#19c8b9');
+        ctx.fillStyle=gm;
+        ctx.beginPath();
+        ctx.moveTo(mX,y);ctx.lineTo(L+halfW-r2,y);
+        ctx.quadraticCurveTo(L+halfW,y,L+halfW,y+r2);
+        ctx.lineTo(L+halfW,y+bh-r2);
+        ctx.quadraticCurveTo(L+halfW,y+bh,L+halfW-r2,y+bh);
+        ctx.lineTo(mX,y+bh);ctx.closePath();ctx.fill();
+        const fW=d.female*scale;
+        const gf=ctx.createLinearGradient(L+halfW,y,L+halfW+fW,y);
+        gf.addColorStop(0,'#f5a0b8');gf.addColorStop(1,'#f7b8cc');
+        ctx.fillStyle=gf;
+        ctx.beginPath();
+        ctx.moveTo(L+halfW,y);ctx.lineTo(L+halfW+fW-r2,y);
+        ctx.quadraticCurveTo(L+halfW+fW,y,L+halfW+fW,y+r2);
+        ctx.lineTo(L+halfW+fW,y+bh-r2);
+        ctx.quadraticCurveTo(L+halfW+fW,y+bh,L+halfW+fW-r2,y+bh);
+        ctx.lineTo(L+halfW,y+bh);ctx.closePath();ctx.fill();
+        ctx.fillStyle='#725d42';ctx.font='bold 12px Nunito,"Noto Sans SC",sans-serif';ctx.textAlign='center';
+        ctx.fillText(d.age,L+halfW,y+bh/2+4);
+        if(d.male>30){ctx.fillStyle='#fff';ctx.font='11px Nunito,sans-serif';ctx.textAlign='right';ctx.fillText(d.male+'万',mX-4,y+bh/2+4)}
+        if(d.female>30){ctx.fillStyle='#fff';ctx.font='11px Nunito,sans-serif';ctx.textAlign='left';ctx.fillText(d.female+'万',L+halfW+fW+4,y+bh/2+4)}
+    });
+}
+
+const maxBarVal=Math.max(...data.map(d=>Math.max(d.male,d.female)));
+document.getElementById('ageGrid').innerHTML=data.map(d=>{
+    const t=d.male+d.female,r=(d.male/d.female*100).toFixed(1);
+    return '<div class="age-card"><div class="age-card-label">'+d.age+' 岁</div>'+
+        '<div class="age-bar-row"><span class="age-bar-label">男</span><div class="age-bar-track"><div class="age-bar-fill-m" style="width:'+(d.male/maxBarVal*100)+'%"></div></div><span class="age-bar-count">'+d.male+'万</span></div>'+
+        '<div class="age-bar-row"><span class="age-bar-label">女</span><div class="age-bar-track"><div class="age-bar-fill-f" style="width:'+(d.female/maxBarVal*100)+'%"></div></div><span class="age-bar-count age-bar-count-f">'+d.female+'万</span></div>'+
+        '<div style="text-align:center;margin-top:10px;font-size:12px;color:#9f927d">合计 '+t+'万 · 性别比 '+r+'</div></div>';
+}).join('');
+
+const elderly=data.slice(-5).reduce((s,d)=>s+d.male+d.female,0);
+const kids=data.slice(0,3).reduce((s,d)=>s+d.male+d.female,0);
+const working=totalPop-elderly-kids;
+const peakGroup=data.reduce((a,b)=>a.male+a.female>b.male+b.female?a:b);
+const maleLess=totalFemale-totalMale;
+const oldYoungRatio=elderly/kids*100;
+
+document.getElementById('insightsGrid').innerHTML=[
+    {icon:'👴',val:(elderly/totalPop*100).toFixed(1)+'%',label:'65岁以上老年人口占比',sub:fmt(elderly)+'万人 · 超老龄化城市',trend:'↑ 全国16.9% · 全球10.7%',tc:'#e05a5a'},
+    {icon:'👶',val:(kids/totalPop*100).toFixed(1)+'%',label:'0-14岁少儿人口占比',sub:fmt(kids)+'万人 · 少子化严重',trend:'↓ 全国14.3% · 全球24.6%',tc:'#f5c31c'},
+    {icon:'💼',val:(working/totalPop*100).toFixed(1)+'%',label:'15-64岁劳动年龄人口',sub:fmt(working)+'万人 · 外来人口补充',trend:'→ 依赖移民流入',tc:'#19c8b9'},
+    {icon:'📊',val:peakGroup.age+'岁',label:'人口最多的年龄段',sub:fmt(peakGroup.male+peakGroup.female)+'万人 · 外来青壮年',trend:'💼 30-34岁来沪高峰',tc:'#6fba2c'},
+    {icon:'👩',val:fmt(maleLess)+'万',label:'女性比男性多出',sub:'性别比 '+sexRatio.toFixed(1)+' · 老年女性更多',trend:'♀ 长寿效应',tc:'#f5a0b8'},
+    {icon:'🌊',val:oldYoungRatio.toFixed(1),label:'老少比（65+/0-14×100）',sub:'每100名少儿对应'+oldYoungRatio.toFixed(0)+'名老人',trend:'⚠️ 全国118 · 全球43',tc:'#e05a5a'}
+].map(ins=>'<div class="insight-card"><span class="insight-icon">'+ins.icon+'</span><div class="insight-value">'+ins.val+'</div><div class="insight-label">'+ins.label+'</div><div class="insight-sub">'+ins.sub+'</div><span class="insight-trend" style="background:'+(ins.tc+'20')+';color:'+ins.tc+'">'+ins.trend+'</span></div>').join('');
+
+document.getElementById('tableBody').innerHTML=data.map(d=>{
+    const t=d.male+d.female,r=(d.male/d.female*100).toFixed(1),p=(t/totalPop*100).toFixed(1);
+    const hl=(d.age==='30-34'||d.age==='65-69')?' class="boomer-row"':'';
+    return '<tr'+hl+'><td class="age-label-cell">'+d.age+'</td><td style="font-size:12px;color:#9f927d">'+d.birth+'</td><td>'+d.male+'</td><td>'+d.female+'</td><td>'+r+'</td><td>'+t+'</td><td>'+p+'%</td></tr>';
+}).join('')+
+'<tr style="background:#f0ece2;font-weight:700">'+
+'<td class="age-label-cell" style="font-size:15px">合计</td><td style="font-size:12px;color:#9f927d">—</td>'+
+'<td style="font-weight:700">'+totalMale+'</td>'+
+'<td style="font-weight:700">'+totalFemale+'</td>'+
+'<td style="font-weight:700">'+sexRatio.toFixed(1)+'</td>'+
+'<td style="font-weight:700">'+totalPop+'</td>'+
+'<td style="font-weight:700">100%</td></tr>';
+
+window.addEventListener('load',drawPyramid);
+window.addEventListener('resize',drawPyramid);
+</script>
+</body>
+</html>
